@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 const NAV_LINKS = [
   { label: 'Projects', href: '/' },
   { label: 'About',    href: '/about' },
-  { label: 'Process',  href: '/process' },
   { label: 'Contact',  href: '/contact' },
 ] as const;
 
@@ -44,12 +43,6 @@ export function BottomNav() {
           })}
         </ul>
 
-        <span
-          className="text-xs tracking-[0.15em] uppercase opacity-30 select-none"
-          style={{ fontWeight: 600 }}
-        >
-          EN
-        </span>
       </div>
     </nav>
   );

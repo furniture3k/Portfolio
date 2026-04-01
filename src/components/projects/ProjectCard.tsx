@@ -15,7 +15,7 @@ import type { Project } from '@/data/projects';
 import { clipReveal } from '@/lib/motion';
 
 const DIMENSIONS: Record<Project['aspectRatio'], { width: number; height: number }> = {
-  portrait:  { width: 800,  height: 1067 },
+  portrait:  { width: 800,  height: 900  },
   landscape: { width: 1200, height: 800  },
   square:    { width: 900,  height: 900  },
 };
@@ -102,7 +102,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                   alt={project.title}
                   width={width}
                   height={height}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
                   className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
                 />
               ) : (

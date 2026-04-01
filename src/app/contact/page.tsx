@@ -2,10 +2,14 @@
 
 import { motion } from 'framer-motion';
 import { fadeUp, staggerContainer } from '@/lib/motion';
+import { useScrambleText } from '@/hooks/useScrambleText';
 
-const EMAIL = 'hello@joshuatrow.com';
+const EMAIL = 'joshtrow04@gmail.com';
 
 export default function ContactPage() {
+  const line1 = useScrambleText('OPEN TO', 100);
+  const line2 = useScrambleText('WORK.', 400);
+
   return (
     <motion.div
       variants={staggerContainer}
@@ -17,9 +21,9 @@ export default function ContactPage() {
       <motion.h1
         variants={fadeUp}
         className="font-bold leading-[0.92] tracking-tight text-fg"
-        style={{ fontSize: 'clamp(2.5rem, 7vw, 9rem)' }}
+        style={{ fontSize: 'clamp(3.5rem, 7vw, 9rem)' }}
       >
-        Let&apos;s Work<br />Together.
+        {line1}<br />{line2}
       </motion.h1>
 
       {/* Email as large display link */}
@@ -27,7 +31,7 @@ export default function ContactPage() {
         <a
           href={`mailto:${EMAIL}`}
           className="inline-block font-semibold text-fg hover:text-accent transition-colors duration-300 leading-none tracking-tight break-all"
-          style={{ fontSize: 'clamp(1.25rem, 3.5vw, 4rem)' }}
+          style={{ fontSize: 'clamp(1.5rem, 3.5vw, 4rem)' }}
         >
           {EMAIL}
         </a>

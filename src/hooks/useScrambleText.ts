@@ -9,7 +9,7 @@ function randomChar() {
 }
 
 export function useScrambleText(target: string, delay = 0) {
-  const [display, setDisplay] = useState(() => target.replace(/[^ ]/g, randomChar));
+  const [display, setDisplay] = useState(target);
 
   useEffect(() => {
     let frame: number;

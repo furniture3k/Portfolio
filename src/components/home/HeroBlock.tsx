@@ -28,7 +28,7 @@ export function HeroBlock() {
             className="text-[10px] tracking-[0.18em] uppercase text-fg/60"
             style={{ fontWeight: 500 }}
           >
-            2024—25
+            Johannesburg, ZA
           </span>
         </motion.div>
 
@@ -36,7 +36,7 @@ export function HeroBlock() {
         <motion.h1
           variants={fadeUp}
           className="text-fg leading-[0.86] tracking-[-0.04em] mt-6"
-          style={{ fontSize: 'clamp(3rem, 8.5vw, 11rem)', fontWeight: 900 }}
+          style={{ fontSize: 'clamp(4rem, 8.5vw, 11rem)', fontWeight: 900 }}
         >
           {line1}<br />{line2}
         </motion.h1>
@@ -54,10 +54,10 @@ export function HeroBlock() {
             Concept to execution.
           </p>
           <span
-            className="text-[10px] tracking-[0.18em] uppercase text-fg/60 text-right hidden sm:block"
+            className="text-[10px] tracking-[0.18em] uppercase text-fg/60 text-right"
             style={{ fontWeight: 500 }}
           >
-            Available for<br />commissions
+            Open to<br />work
           </span>
         </motion.div>
       </motion.div>
