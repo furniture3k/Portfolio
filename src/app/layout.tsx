@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Unbounded } from 'next/font/google';
 import './globals.css';
-import { BottomNav } from '@/components/layout/BottomNav';
+import { Header } from '@/components/layout/Header';
 import { SmoothScrollProvider } from '@/components/layout/SmoothScrollProvider';
 import { CustomCursor } from '@/components/ui/CustomCursor';
 import { ScrollProgress } from '@/components/ui/ScrollProgress';
@@ -38,10 +38,10 @@ export default function RootLayout({
         <SmoothScrollProvider>
           <CustomCursor />
           <ScrollProgress />
-          <main className="pb-nav-h min-h-screen">
+          <Header />
+          <main className="min-h-screen">
             {children}
           </main>
-          <BottomNav />
         </SmoothScrollProvider>
       </body>
     </html>
