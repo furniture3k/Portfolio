@@ -3,32 +3,70 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import type { Project } from '@/data/projects';
 import { AnimatedImage } from '@/components/ui/AnimatedImage';
 import { fadeUp, staggerContainer } from '@/lib/motion';
+import { projects } from '@/data/projects';
 
 interface ProjectDetailProps {
   project: Project;
 }
 
-const PLACEHOLDER_COLOR = '#E8E8E8';
-
 export function ProjectDetail({ project }: ProjectDetailProps) {
   const hasHero = Boolean(project.heroImageUrl);
+  const currentIndex = projects.findIndex((p) => p.slug === project.slug);
+  const nextProject = projects[(currentIndex + 1) % projects.length];
 
   return (
     <article>
-      {/* Back navigation */}
-      <div className="px-8 md:px-12 pt-8 pb-4">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-sm tracking-wider uppercase font-medium text-fg/60 hover:text-fg transition-colors duration-200"
+      {/* Full-bleed title section */}
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+        className="bg-accent px-8 md:px-12 pt-10 pb-10 md:pt-14 md:pb-14"
+      >
+        {/* Back link */}
+        <motion.div variants={fadeUp}>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase font-medium text-fg/60 hover:text-fg transition-colors duration-200 mb-10 md:mb-14"
+          >
+            <ArrowLeft size={12} />
+            All Projects
+          </Link>
+        </motion.div>
+
+        {/* Project number + category */}
+        <motion.p
+          variants={fadeUp}
+          className="text-[10px] tracking-[0.22em] uppercase text-fg/60 mb-4"
+          style={{ fontWeight: 600 }}
         >
-          <ArrowLeft size={14} />
-          Projects
-        </Link>
-      </div>
+          {String(currentIndex + 1).padStart(2, '0')} &nbsp;/&nbsp; {project.category[0].replace('-', ' ')}
+        </motion.p>
+
+        {/* Title */}
+        <motion.h1
+          variants={fadeUp}
+          className="text-fg leading-[0.86] tracking-[-0.03em]"
+          style={{ fontSize: 'clamp(2.5rem, 7vw, 9rem)', fontWeight: 900 }}
+        >
+          {project.title}
+        </motion.h1>
+
+        {/* Meta row */}
+        <motion.div
+          variants={fadeUp}
+          className="flex flex-wrap gap-8 mt-8 md:mt-10 text-xs tracking-[0.14em] uppercase text-fg/60"
+          style={{ fontWeight: 500 }}
+        >
+          <span>{project.client}</span>
+          <span>{project.year}</span>
+          {project.toolsUsed && <span>{project.toolsUsed.join(' · ')}</span>}
+        </motion.div>
+      </motion.div>
 
       {/* Hero image */}
       <div className="w-full">
@@ -44,61 +82,41 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
           />
         ) : (
           <div
-            className="w-full"
-            style={{ backgroundColor: PLACEHOLDER_COLOR, aspectRatio: '16 / 9' }}
+            className="w-full bg-fg/5"
+            style={{ aspectRatio: '16 / 9' }}
             aria-hidden
           />
         )}
       </div>
 
-      {/* Project info */}
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-        className="px-8 md:px-12 py-12 md:py-16 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16"
-      >
-        {/* Left — title + metadata */}
-        <div>
-          <motion.h1
-            variants={fadeUp}
-            className="font-bold leading-tight tracking-tight text-fg"
-            style={{ fontSize: 'clamp(2rem, 5vw, 5rem)' }}
-          >
-            {project.title}
-          </motion.h1>
+      {/* Description */}
+      <div className="px-8 md:px-12 py-14 md:py-20 max-w-3xl">
+        <p
+          className="text-[10px] tracking-[0.22em] uppercase text-fg/40 mb-6"
+          style={{ fontWeight: 600 }}
+        >
+          About the project
+        </p>
+        <p className="text-lg md:text-xl leading-relaxed text-fg/80" style={{ fontWeight: 300 }}>
+          {project.description}
+        </p>
 
-          <motion.dl variants={fadeUp} className="mt-8 space-y-3 text-sm">
-            <div className="flex gap-4">
-              <dt className="text-fg/40 tracking-wider uppercase font-medium w-20 shrink-0">Client</dt>
-              <dd className="font-medium">{project.client}</dd>
-            </div>
-            <div className="flex gap-4">
-              <dt className="text-fg/40 tracking-wider uppercase font-medium w-20 shrink-0">Year</dt>
-              <dd className="font-medium">{project.year}</dd>
-            </div>
-            <div className="flex gap-4">
-              <dt className="text-fg/40 tracking-wider uppercase font-medium w-20 shrink-0">Type</dt>
-              <dd className="font-medium capitalize">{project.category.join(', ')}</dd>
-            </div>
-            {project.toolsUsed && project.toolsUsed.length > 0 && (
-              <div className="flex gap-4">
-                <dt className="text-fg/40 tracking-wider uppercase font-medium w-20 shrink-0">Tools</dt>
-                <dd className="font-medium">{project.toolsUsed.join(', ')}</dd>
-              </div>
-            )}
-          </motion.dl>
-        </div>
+        {project.tags && project.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-10">
+            {project.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-[10px] tracking-[0.16em] uppercase px-3 py-1.5 border border-fg/15 text-fg/60"
+                style={{ fontWeight: 500 }}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
 
-        {/* Right — description */}
-        <motion.div variants={fadeUp}>
-          <p className="text-base md:text-lg leading-relaxed text-fg/80">
-            {project.description}
-          </p>
-        </motion.div>
-      </motion.div>
-
-      {/* Gallery — additional images */}
+      {/* Gallery */}
       {project.gallery && project.gallery.length > 0 && (
         <div className="px-8 md:px-12 pb-12 space-y-3">
           {project.gallery.map((src, i) => (
@@ -114,6 +132,29 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
           ))}
         </div>
       )}
+
+      {/* Next project */}
+      <div className="border-t border-fg/10 mx-8 md:mx-12" />
+      <Link
+        href={`/projects/${nextProject.slug}`}
+        className="group flex items-center justify-between px-8 md:px-12 py-10 md:py-14 hover:bg-fg/[0.02] transition-colors duration-300"
+      >
+        <div>
+          <p className="text-[10px] tracking-[0.22em] uppercase text-fg/40 mb-2" style={{ fontWeight: 600 }}>
+            Next Project
+          </p>
+          <p
+            className="text-fg leading-tight tracking-[-0.02em] group-hover:text-accent transition-colors duration-300"
+            style={{ fontSize: 'clamp(1.25rem, 3vw, 3rem)', fontWeight: 800 }}
+          >
+            {nextProject.title}
+          </p>
+        </div>
+        <ArrowRight
+          size={24}
+          className="text-fg/30 group-hover:text-accent group-hover:translate-x-2 transition-all duration-300"
+        />
+      </Link>
     </article>
   );
 }

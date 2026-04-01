@@ -4,13 +4,13 @@
 :root {
   --bg:     #ffffff;
   --fg:     #0a0a0a;
-  --accent: #ffff26;
+  --accent: #9bd1a9;
 }
 
 /* ─── Tailwind v4 Theme ──────────────────────────────────────────────────── */
 @theme inline {
   /* Font family */
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-unbounded), ui-sans-serif, system-ui, sans-serif;
 
   /* Brand colors — mapped to CSS vars so they remain runtime-switchable */
   --color-accent: var(--accent);
@@ -64,4 +64,9 @@ html.lenis body {
 /* Prevent layout shift from scrollbar */
 * {
   box-sizing: border-box;
+}
+
+/* Hide default cursor — custom cursor handles it */
+html, html * {
+  cursor: none !important;
 }

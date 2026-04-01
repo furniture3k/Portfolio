@@ -18,9 +18,8 @@ export function BottomNav() {
       className="fixed bottom-0 left-0 right-0 z-50 h-nav-h border-t border-fg/10 bg-bg"
       aria-label="Main navigation"
     >
-      <div className="flex h-full items-center justify-between px-8 md:px-12">
-        {/* Left nav links */}
-        <ul className="flex items-center gap-8 md:gap-12 list-none p-0 m-0">
+      <div className="flex h-full items-center justify-between px-6 md:px-10">
+        <ul className="flex items-center gap-8 md:gap-14 list-none p-0 m-0">
           {NAV_LINKS.map(({ label, href }) => {
             const isActive =
               href === '/' ? pathname === '/' : pathname.startsWith(href);
@@ -29,13 +28,13 @@ export function BottomNav() {
                 <Link
                   href={href}
                   className={[
-                    'relative text-sm tracking-wider uppercase font-medium',
-                    'transition-opacity duration-200 hover:opacity-60',
-                    'after:absolute after:bottom-[-2px] after:left-0 after:h-px after:w-full',
+                    'relative text-[11px] tracking-[0.2em] uppercase',
+                    'transition-opacity duration-200 hover:opacity-40',
+                    'after:absolute after:bottom-[-3px] after:left-0 after:h-px after:w-full',
                     'after:origin-left after:bg-fg after:transition-transform after:duration-300',
                     isActive
-                      ? 'after:scale-x-100 font-bold'
-                      : 'after:scale-x-0 hover:after:scale-x-100',
+                      ? 'after:scale-x-100 font-bold opacity-100'
+                      : 'font-medium opacity-60 after:scale-x-0 hover:after:scale-x-100 hover:opacity-100',
                   ].join(' ')}
                 >
                   {label}
@@ -45,8 +44,10 @@ export function BottomNav() {
           })}
         </ul>
 
-        {/* Right — locale slot (static, no i18n yet) */}
-        <span className="text-sm tracking-wider uppercase font-medium opacity-40 select-none">
+        <span
+          className="text-xs tracking-[0.15em] uppercase opacity-30 select-none"
+          style={{ fontWeight: 600 }}
+        >
           EN
         </span>
       </div>

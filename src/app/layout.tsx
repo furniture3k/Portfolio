@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
-import { Space_Grotesk } from 'next/font/google';
+import { Unbounded } from 'next/font/google';
 import './globals.css';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { SmoothScrollProvider } from '@/components/layout/SmoothScrollProvider';
+import { CustomCursor } from '@/components/ui/CustomCursor';
+import { ScrollProgress } from '@/components/ui/ScrollProgress';
 
-const spaceGrotesk = Space_Grotesk({
+const unbounded = Unbounded({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-space-grotesk',
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-unbounded',
   display: 'swap',
 });
 
@@ -31,10 +33,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={spaceGrotesk.variable}>
+    <html lang="en" className={unbounded.variable}>
       <body className="bg-bg text-fg antialiased">
         <SmoothScrollProvider>
-          {/* pb-nav-h ensures page content is never hidden behind the fixed bottom nav */}
+          <CustomCursor />
+          <ScrollProgress />
           <main className="pb-nav-h min-h-screen">
             {children}
           </main>

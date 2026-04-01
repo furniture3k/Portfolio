@@ -48,7 +48,7 @@ function ProcessStep({
       variants={fadeUp}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      style={{ transitionDelay: `${index * 0.06}s` }}
+      transition={{ delay: index * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="relative border-t border-fg/10 py-10 md:py-14 grid grid-cols-1 md:grid-cols-[auto_1fr_2fr] gap-6 md:gap-12 items-start"
     >
       {/* Large decorative number */}
