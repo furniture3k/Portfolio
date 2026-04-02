@@ -36,12 +36,17 @@ export default function RootLayout({
     <html lang="en" className={unbounded.variable}>
       <body className="bg-bg text-fg antialiased">
         <SmoothScrollProvider>
-          <CustomCursor />
-          <ScrollProgress />
-          <Header />
-          <main className="min-h-screen">
-            {children}
-          </main>
+          <div
+            className="w-full"
+            style={{ overflowX: 'clip', maxWidth: '100vw', touchAction: 'pan-y', position: 'relative' }}
+          >
+            <CustomCursor />
+            <ScrollProgress />
+            <Header />
+            <main className="min-h-screen w-full">
+              {children}
+            </main>
+          </div>
         </SmoothScrollProvider>
       </body>
     </html>

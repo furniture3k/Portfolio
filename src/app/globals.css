@@ -40,6 +40,16 @@ html {
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Lenis overrides this via inline style — the wrapper div in layout.tsx
+     handles overflow-x containment for mobile. */
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  /* Ensure body never stretches past viewport on mobile */
+  width: 100%;
 }
 
 /* Lenis scroll resets */
