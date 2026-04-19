@@ -3,16 +3,14 @@
 export type AspectRatio = 'portrait' | 'landscape' | 'square';
 
 export type ProjectCategory =
-  | 'branding'
-  | 'web'
-  | 'print'
-  | 'motion'
-  | 'strategy'
-  | 'fashion'
-  | 'graphic-design'
-  | 'photography'
-  | 'pattern'
-  | 'digital';
+  | 'branding' | 'web' | 'print' | 'motion' | 'strategy'
+  | 'fashion' | 'graphic-design' | 'photography' | 'pattern' | 'digital';
+
+export interface GallerySection {
+  title: string;
+  // Each row is 1 image (full-width) or 2 images (side-by-side)
+  rows: string[][];
+}
 
 export interface Project {
   id: string;
@@ -22,165 +20,145 @@ export interface Project {
   year: number;
   category: ProjectCategory[];
   description: string;
-  /** Path relative to /public — leave empty string until images are added */
   thumbnailUrl: string;
   heroImageUrl: string;
-  /** Controls card dimensions: portrait=800×1067, landscape=1200×800, square=900×900 */
   aspectRatio: AspectRatio;
   toolsUsed?: string[];
-  gallery?: string[];
+  sections?: GallerySection[];
   accentColor?: string;
   tags?: string[];
 }
 
 // ─── Projects ─────────────────────────────────────────────────────────────────
-// Images left empty — add paths once photos are dropped into /public/images/projects/
+
+const p = (n: number) => `/images/projects/page-${String(n).padStart(2, '0')}.jpg`;
 
 export const projects: Project[] = [
   {
     id: '01',
-    slug: 'form-rest',
-    title: 'Form // Rest',
-    client: 'STADIO — Year 3 Final',
+    slug: 'university',
+    title: 'University Projects',
+    client: 'Portfolio 2025',
     year: 2025,
-    category: ['fashion'],
+    category: ['fashion', 'graphic-design'],
     description:
-      'This project explores WGSN S/S 26 Extra Ordinary through the lens of Industrial Futurism. The collection balances utilitarian function with refined minimalism — a contemporary wardrobe designed for a progressive, design-aware consumer navigating everyday life in an industrialised future.',
-    thumbnailUrl: '',
-    heroImageUrl: '',
-    aspectRatio: 'portrait',
-    toolsUsed: ['Photoshop', 'Illustrator', 'Procreate', 'Pattern Making'],
-    gallery: [],
-    tags: ['industrial futurism', 'menswear', 'utilitarian', 'SS26'],
+      'Three years of fashion design at STADIO — spanning menswear, street-inspired collections, digital garment creation, and graphic pattern work. From concept through to construction.',
+    thumbnailUrl: p(8),
+    heroImageUrl: p(8),
+    aspectRatio: 'landscape',
+    toolsUsed: ['Photoshop', 'Illustrator', 'Procreate', 'Pattern Making', 'Browzwear VStitcher'],
+    tags: ['fashion', 'menswear', 'graphic design', 'STADIO', '2025'],
+    sections: [
+      {
+        title: 'Form // Rest — Year 3 Final',
+        rows: [
+          [p(5)],
+          [p(6), p(7)],
+          [p(8)],
+          [p(12)],
+          [p(9), p(10)],
+          [p(11)],
+        ],
+      },
+      {
+        title: 'Retro Nights — Year 2 Final',
+        rows: [
+          [p(14), p(15)],
+          [p(16)],
+          [p(17), p(18)],
+        ],
+      },
+      {
+        title: 'Misc Projects',
+        rows: [
+          [p(20), p(21)],
+        ],
+      },
+    ],
   },
+
   {
     id: '02',
-    slug: 'retro-nights',
-    title: 'Retro Nights',
-    client: 'STADIO — Year 2 Final',
+    slug: 'placeholder-02',
+    title: 'Graphic Identity',
+    client: 'Personal Project',
     year: 2024,
-    category: ['fashion'],
-    description:
-      'This project investigates local South African street style as a form of cultural identity and expression. Drawing from urban youth culture, the collection translates diverse street influences into a contemporary capsule range. A strong emphasis is placed on sustainability, with 60–70% of each look constructed using upcycled Levi\'s denim.',
+    category: ['branding'],
+    description: '',
     thumbnailUrl: '',
     heroImageUrl: '',
     aspectRatio: 'portrait',
-    toolsUsed: ['Photoshop', 'Illustrator', 'Procreate', 'Pattern Making'],
-    tags: ['street style', 'south africa', 'upcycled denim', 'sustainability'],
   },
   {
     id: '03',
-    slug: 'retro-nights-construction',
-    title: 'Retro Nights — Construction',
-    client: 'STADIO — Year 2 Final',
+    slug: 'placeholder-03',
+    title: 'Type Poster Series',
+    client: 'Editorial',
     year: 2024,
-    category: ['fashion'],
-    description:
-      'WIP documentation of the Retro Nights collection construction process. Patchwork denim panels in electric blue and chartreuse yellow, developed from upcycled Levi\'s jeans. Each panel was hand-cut and assembled to form the geometric diamond structures across all four looks.',
+    category: ['print'],
+    description: '',
     thumbnailUrl: '',
     heroImageUrl: '',
-    aspectRatio: 'landscape',
-    toolsUsed: ['Pattern Making', 'Photoshop'],
-    tags: ['construction', 'patchwork', 'denim', 'process'],
+    aspectRatio: 'square',
   },
   {
     id: '04',
-    slug: 'playful-paradox',
-    title: 'Playful Paradox',
-    client: 'STADIO — Pattern Creation',
-    year: 2024,
-    category: ['pattern', 'graphic-design'],
-    description:
-      'Pattern creation based on the Women\'s S/S 26 Playful Paradox Patterns trend report by WGSN. Three colourways — teal, red, and orange — each applied to garment illustrations to demonstrate placement and repeat.',
+    slug: 'placeholder-04',
+    title: 'Lookbook',
+    client: 'Self-Initiated',
+    year: 2023,
+    category: ['fashion', 'photography'],
+    description: '',
     thumbnailUrl: '',
     heroImageUrl: '',
-    aspectRatio: 'square',
-    toolsUsed: ['Illustrator', 'Photoshop'],
-    tags: ['pattern', 'WGSN', 'SS26', 'womenswear'],
+    aspectRatio: 'portrait',
   },
   {
     id: '05',
-    slug: 'digital-product-creation',
-    title: 'Life Is Better in Pyjamas',
-    client: 'STADIO — Digital Product Creation',
-    year: 2024,
-    category: ['digital', 'fashion'],
-    description:
-      'Using Browzwear VStitcher, a two-piece pyjama set was digitally designed — consisting of a crop top and wide-leg pants. The final outcome includes three colourways (yellow, teal, pink), featuring a floral placement pattern on the pants and a graphic on the front of the top.',
+    slug: 'placeholder-05',
+    title: 'Pattern Study',
+    client: 'STADIO',
+    year: 2023,
+    category: ['pattern'],
+    description: '',
     thumbnailUrl: '',
     heroImageUrl: '',
     aspectRatio: 'landscape',
-    toolsUsed: ['Browzwear VStitcher', 'Illustrator', 'Photoshop'],
-    tags: ['3D garment', 'digital fashion', 'VStitcher', 'pyjamas'],
   },
   {
     id: '06',
-    slug: 'surface-tension',
-    title: 'Surface Tension',
-    client: 'STADIO — Graphic Design',
-    year: 2025,
-    category: ['graphic-design', 'branding'],
-    description: 'A typographic identity system exploring tension between negative space and form.',
+    slug: 'placeholder-06',
+    title: 'Digital Garment',
+    client: 'VStitcher',
+    year: 2024,
+    category: ['fashion', 'digital'],
+    description: '',
     thumbnailUrl: '',
     heroImageUrl: '',
     aspectRatio: 'square',
-    toolsUsed: ['Illustrator', 'Photoshop'],
-    tags: ['typography', 'identity', 'branding'],
   },
   {
     id: '07',
-    slug: 'cold-press',
-    title: 'Cold Press',
-    client: 'Personal',
-    year: 2025,
-    category: ['photography'],
-    description: 'A personal photography series documenting texture, material, and light in everyday industrial spaces.',
+    slug: 'placeholder-07',
+    title: 'Brand Campaign',
+    client: 'Client',
+    year: 2024,
+    category: ['graphic-design'],
+    description: '',
     thumbnailUrl: '',
     heroImageUrl: '',
     aspectRatio: 'portrait',
-    toolsUsed: ['Lightroom', 'Photoshop'],
-    tags: ['photography', 'texture', 'industrial'],
   },
   {
     id: '08',
-    slug: 'year-one-collection',
-    title: 'Year One Collection',
-    client: 'STADIO — Year 1 Final',
+    slug: 'placeholder-08',
+    title: 'Zine',
+    client: 'Self-Initiated',
     year: 2023,
-    category: ['fashion'],
-    description: 'First full collection exploring volume, silhouette, and construction fundamentals.',
-    thumbnailUrl: '',
-    heroImageUrl: '',
-    aspectRatio: 'portrait',
-    toolsUsed: ['Pattern Making', 'Procreate'],
-    tags: ['womenswear', 'volume', 'silhouette'],
-  },
-  {
-    id: '09',
-    slug: 'flat-sketches',
-    title: 'Technical Flat Sketches',
-    client: 'STADIO — Technical Drawing',
-    year: 2024,
-    category: ['fashion', 'graphic-design'],
-    description: 'A collection of technical flat sketches across multiple briefs, demonstrating garment construction knowledge and detail.',
+    category: ['print'],
+    description: '',
     thumbnailUrl: '',
     heroImageUrl: '',
     aspectRatio: 'landscape',
-    toolsUsed: ['Illustrator'],
-    tags: ['technical drawing', 'flats', 'construction'],
-  },
-  {
-    id: '10',
-    slug: 'mood-systems',
-    title: 'Mood Systems',
-    client: 'Personal',
-    year: 2025,
-    category: ['graphic-design'],
-    description: 'Experimental moodboarding as a design tool — colour, texture, and narrative assembled into visual systems.',
-    thumbnailUrl: '',
-    heroImageUrl: '',
-    aspectRatio: 'square',
-    toolsUsed: ['Photoshop', 'Illustrator'],
-    tags: ['moodboard', 'colour', 'concept'],
   },
 ];

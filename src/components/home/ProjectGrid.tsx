@@ -26,7 +26,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
   return (
     <Link
-      href={`/projects/${project.slug}`}
+      href={`/project/${project.slug}`}
       className="block"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

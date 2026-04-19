@@ -3,158 +3,142 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import type { Project } from '@/data/projects';
-import { AnimatedImage } from '@/components/ui/AnimatedImage';
 import { fadeUp, staggerContainer } from '@/lib/motion';
-import { projects } from '@/data/projects';
 
-interface ProjectDetailProps {
-  project: Project;
-}
-
-export function ProjectDetail({ project }: ProjectDetailProps) {
-  const hasHero = Boolean(project.heroImageUrl);
-  const currentIndex = projects.findIndex((p) => p.slug === project.slug);
-  const nextProject = projects[(currentIndex + 1) % projects.length];
-
+export function ProjectDetail({ project }: { project: Project }) {
   return (
-    <article>
-      {/* Full-bleed title section */}
+    <article className="pb-32">
+
+      {/* ── Header ── */}
       <motion.div
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        className="bg-accent px-8 md:px-12 pt-10 pb-10 md:pt-14 md:pb-14"
+        className="px-6 md:px-10 pt-8 pb-12 md:pt-12 md:pb-16"
       >
-        {/* Back link */}
         <motion.div variants={fadeUp}>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase font-medium text-fg/60 hover:text-fg transition-colors duration-200 mb-10 md:mb-14"
+            className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase font-medium text-fg/50 hover:text-fg transition-colors duration-200 mb-12"
           >
-            <ArrowLeft size={12} />
-            All Projects
+            <ArrowLeft size={11} />
+            Back
           </Link>
         </motion.div>
 
-        {/* Project number + category */}
         <motion.p
           variants={fadeUp}
-          className="text-[10px] tracking-[0.22em] uppercase text-fg/60 mb-4"
+          className="text-[10px] tracking-[0.22em] uppercase text-fg/40 mb-4"
           style={{ fontWeight: 600 }}
         >
-          {String(currentIndex + 1).padStart(2, '0')} &nbsp;/&nbsp; {project.category[0].replace('-', ' ')}
+          {project.category.map(c => c.replace('-', ' ')).join(' · ')}
         </motion.p>
 
-        {/* Title */}
         <motion.h1
           variants={fadeUp}
-          className="text-fg leading-[0.86] tracking-[-0.03em]"
-          style={{ fontSize: 'clamp(2.5rem, 7vw, 9rem)', fontWeight: 900 }}
+          className="text-fg leading-[0.88] tracking-[-0.03em] mb-8"
+          style={{ fontSize: 'clamp(3rem, 8vw, 10rem)', fontWeight: 900 }}
         >
           {project.title}
         </motion.h1>
 
-        {/* Meta row */}
         <motion.div
           variants={fadeUp}
-          className="flex flex-wrap gap-8 mt-8 md:mt-10 text-xs tracking-[0.14em] uppercase text-fg/60"
+          className="flex flex-wrap gap-6 text-[10px] tracking-[0.18em] uppercase text-fg/40 mb-10"
           style={{ fontWeight: 500 }}
         >
           <span>{project.client}</span>
           <span>{project.year}</span>
           {project.toolsUsed && <span>{project.toolsUsed.join(' · ')}</span>}
         </motion.div>
-      </motion.div>
 
-      {/* Hero image */}
-      <div className="w-full">
-        {hasHero ? (
-          <AnimatedImage
-            src={project.heroImageUrl}
-            alt={`${project.title} hero`}
-            width={1920}
-            height={1080}
-            priority
-            sizes="100vw"
-            className="w-full"
-          />
-        ) : (
-          <div
-            className="w-full bg-fg/5"
-            style={{ aspectRatio: '16 / 9' }}
-            aria-hidden
-          />
-        )}
-      </div>
-
-      {/* Description */}
-      <div className="px-8 md:px-12 py-14 md:py-20 max-w-3xl">
-        <p
-          className="text-[10px] tracking-[0.22em] uppercase text-fg/40 mb-6"
-          style={{ fontWeight: 600 }}
+        <motion.p
+          variants={fadeUp}
+          className="text-base md:text-lg leading-relaxed text-fg/70 max-w-2xl"
+          style={{ fontWeight: 300 }}
         >
-          About the project
-        </p>
-        <p className="text-lg md:text-xl leading-relaxed text-fg/80" style={{ fontWeight: 300 }}>
           {project.description}
-        </p>
+        </motion.p>
 
-        {project.tags && project.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-10">
-            {project.tags.map((tag) => (
+        {project.tags && (
+          <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mt-8">
+            {project.tags.map(tag => (
               <span
                 key={tag}
-                className="text-[10px] tracking-[0.16em] uppercase px-3 py-1.5 border border-fg/15 text-fg/60"
+                className="text-[9px] tracking-[0.16em] uppercase px-3 py-1.5 border border-fg/12 text-fg/50"
                 style={{ fontWeight: 500 }}
               >
                 {tag}
               </span>
             ))}
-          </div>
+          </motion.div>
         )}
+      </motion.div>
+
+      {/* ── Hero image ── */}
+      <div className="w-full mb-2">
+        <Image
+          src={project.heroImageUrl}
+          alt={project.title}
+          width={2481}
+          height={1754}
+          priority
+          sizes="100vw"
+          className="w-full"
+        />
       </div>
 
-      {/* Gallery */}
-      {project.gallery && project.gallery.length > 0 && (
-        <div className="px-8 md:px-12 pb-12 space-y-3">
-          {project.gallery.map((src, i) => (
-            <AnimatedImage
-              key={i}
-              src={src}
-              alt={`${project.title} gallery image ${i + 1}`}
-              width={1920}
-              height={1280}
-              sizes="(max-width: 1024px) 100vw, 90vw"
-              className="w-full"
-            />
-          ))}
-        </div>
-      )}
+      {/* ── Gallery sections ── */}
+      {project.sections?.map((section) => (
+        <section key={section.title} className="mt-16 md:mt-24">
 
-      {/* Next project */}
-      <div className="border-t border-fg/10 mx-8 md:mx-12" />
-      <Link
-        href={`/projects/${nextProject.slug}`}
-        className="group flex items-center justify-between px-8 md:px-12 py-10 md:py-14 hover:bg-fg/[0.02] transition-colors duration-300"
-      >
-        <div>
-          <p className="text-[10px] tracking-[0.22em] uppercase text-fg/40 mb-2" style={{ fontWeight: 600 }}>
-            Next Project
-          </p>
-          <p
-            className="text-fg leading-tight tracking-[-0.02em] group-hover:text-accent transition-colors duration-300"
-            style={{ fontSize: 'clamp(1.25rem, 3vw, 3rem)', fontWeight: 800 }}
-          >
-            {nextProject.title}
-          </p>
-        </div>
-        <ArrowRight
-          size={24}
-          className="text-fg/30 group-hover:text-accent group-hover:translate-x-2 transition-all duration-300"
-        />
-      </Link>
+          {/* Section label */}
+          <div className="px-6 md:px-10 mb-6 flex items-center gap-4">
+            <div className="flex-1 h-px bg-fg/10" />
+            <span className="text-[9px] tracking-[0.24em] uppercase text-fg/40 shrink-0" style={{ fontWeight: 600 }}>
+              {section.title}
+            </span>
+            <div className="flex-1 h-px bg-fg/10" />
+          </div>
+
+          {/* Rows */}
+          <div className="flex flex-col gap-1">
+            {section.rows.map((row, ri) => (
+              <div
+                key={ri}
+                className={row.length === 2 ? 'grid grid-cols-2 gap-1' : 'w-full'}
+              >
+                {row.map((src, ii) => (
+                  <div key={ii} className="w-full overflow-hidden">
+                    <Image
+                      src={src}
+                      alt={`${section.title} — ${ri + 1}`}
+                      width={2481}
+                      height={1754}
+                      sizes={row.length === 2 ? '50vw' : '100vw'}
+                      className="w-full"
+                    />
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      {/* ── Footer back link ── */}
+      <div className="px-6 md:px-10 mt-24 pt-10 border-t border-fg/10">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase font-medium text-fg/40 hover:text-fg transition-colors duration-200"
+        >
+          <ArrowLeft size={11} />
+          Back to all work
+        </Link>
+      </div>
+
     </article>
   );
 }

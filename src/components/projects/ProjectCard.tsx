@@ -73,7 +73,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
   return (
     <div ref={inViewRef}>
       <Link
-        href={`/projects/${project.slug}`}
+        href={`/project/${project.slug}`}
         className="block outline-none focus-visible:ring-2 focus-visible:ring-fg group"
         aria-label={`View ${project.title}`}
       >
