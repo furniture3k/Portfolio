@@ -102,7 +102,7 @@ function DesktopGrid({ projects }: { projects: Project[] }) {
   return (
     <div
       style={{
-        columnCount: 4,
+        columnCount: 5,
         columnGap: 3,
         padding: 3,
       }}
