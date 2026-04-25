@@ -17,17 +17,12 @@ export function Header() {
 
       {/* ── Mobile ── */}
       <div className="md:hidden flex items-center justify-between px-5 py-3">
-        <div>
-          <Link
-            href="/"
-            className="block text-[9px] tracking-[0.15em] uppercase font-bold hover:opacity-50 transition-opacity duration-200"
-          >
-            Joshua Trow
-          </Link>
-          <p className="text-[8px] tracking-[0.08em] text-fg/50 mt-0.5" style={{ fontWeight: 400 }}>
-            fashion · graphic design
-          </p>
-        </div>
+        <Link
+          href="/"
+          className="text-[9px] tracking-[0.15em] uppercase font-bold hover:opacity-50 transition-opacity duration-200"
+        >
+          Joshua Trow
+        </Link>
 
         <ul className="flex items-center gap-5 list-none p-0 m-0">
           {NAV_LINKS.map(({ label, href }) => {
@@ -53,17 +48,12 @@ export function Header() {
       <div className="hidden md:flex h-nav-h items-center justify-between px-8 lg:px-10">
 
         {/* Logo + tagline */}
-        <div className="shrink-0">
-          <Link
-            href="/"
-            className="block text-[11px] tracking-[0.2em] uppercase font-bold hover:opacity-50 transition-opacity duration-200"
-          >
-            Joshua Trow
-          </Link>
-          <p className="text-[9px] tracking-[0.1em] text-fg/45 mt-0.5" style={{ fontWeight: 400 }}>
-            fashion · graphic design
-          </p>
-        </div>
+        <Link
+          href="/"
+          className="shrink-0 text-[11px] tracking-[0.2em] uppercase font-bold hover:opacity-50 transition-opacity duration-200"
+        >
+          Joshua Trow
+        </Link>
 
         {/* Nav */}
         <ul className="flex items-center gap-10 list-none p-0 m-0 shrink-0">
