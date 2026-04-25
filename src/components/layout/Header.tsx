@@ -13,7 +13,7 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 bg-accent border-b border-fg/10">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-accent border-b border-fg/10">
 
       {/* ── Mobile layout: two-row stacked header ── */}
       <div className="md:hidden flex flex-col items-center justify-center py-2 px-3 gap-1.5">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Project } from '@/data/projects';
@@ -16,9 +16,9 @@ const PLACEHOLDER_COLORS = [
   '#181818', '#202020', '#282828', '#1e1e1e', '#242424',
 ];
 
-// ─── Shared card ──────────────────────────────────────────────────────────────
+// ─── Card ─────────────────────────────────────────────────────────────────────
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectCard({ project, index, priority }: { project: Project; index: number; priority?: boolean }) {
   const { width, height } = DIMENSIONS[project.aspectRatio];
   const hasImage = Boolean(project.thumbnailUrl);
   const placeholderColor = PLACEHOLDER_COLORS[index % PLACEHOLDER_COLORS.length];
@@ -38,6 +38,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             alt={project.title}
             width={width}
             height={height}
+            priority={priority}
             className="w-full h-full object-cover"
           />
         ) : (
@@ -65,51 +66,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   );
 }
 
-// ─── ProjectGrid ──────────────────────────────────────────────────────────────
+// ─── Grid ─────────────────────────────────────────────────────────────────────
 
 export function ProjectGrid({ projects }: { projects: Project[] }) {
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window === 'undefined' || window.innerWidth < 768
-  );
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
-
-  if (isMobile) return <MobileGrid projects={projects} />;
-  return <DesktopGrid projects={projects} />;
-}
-
-// ─── Mobile grid ──────────────────────────────────────────────────────────────
-
-function MobileGrid({ projects }: { projects: Project[] }) {
   return (
-    <div style={{ columnCount: 2, columnGap: 2, padding: 2 }}>
-      {projects.map((project, i) => (
-        <div key={project.id} style={{ breakInside: 'avoid', marginBottom: 2 }}>
-          <ProjectCard project={project} index={i} />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ─── Desktop masonry grid ─────────────────────────────────────────────────────
-
-function DesktopGrid({ projects }: { projects: Project[] }) {
-  return (
-    <div
-      style={{
-        columnCount: 5,
-        columnGap: 3,
-        padding: 3,
-      }}
-    >
+    <div className="columns-2 md:columns-5" style={{ columnGap: 3, padding: 3 }}>
       {projects.map((project, i) => (
         <div key={project.id} style={{ breakInside: 'avoid', marginBottom: 3 }}>
-          <ProjectCard project={project} index={i} />
+          <ProjectCard project={project} index={i} priority={i === 0} />
         </div>
       ))}
     </div>
