@@ -7,11 +7,20 @@ import { ArrowLeft } from 'lucide-react';
 import type { Project } from '@/data/projects';
 import { fadeUp, staggerContainer } from '@/lib/motion';
 
+function MetaBlock({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-sm text-fg" style={{ fontWeight: 700 }}>{label}</p>
+      <p className="text-sm text-fg/60 mt-0.5" style={{ fontWeight: 400 }}>{value}</p>
+    </div>
+  );
+}
+
 export function ProjectDetail({ project }: { project: Project }) {
   return (
     <article>
 
-      {/* ── Fixed left panel (desktop only) ── */}
+      {/* ── Fixed left panel (desktop) ── */}
       <motion.aside
         variants={staggerContainer}
         initial="hidden"
@@ -28,7 +37,6 @@ export function ProjectDetail({ project }: { project: Project }) {
           bg-bg z-10
         "
       >
-        {/* Back */}
         <motion.div variants={fadeUp} className="mb-10">
           <Link
             href="/"
@@ -39,69 +47,46 @@ export function ProjectDetail({ project }: { project: Project }) {
           </Link>
         </motion.div>
 
-        {/* Title */}
-        <motion.p
-          variants={fadeUp}
-          className="text-[9px] tracking-[0.22em] uppercase text-fg/30 mb-3"
-          style={{ fontWeight: 600 }}
-        >
-          {project.category.map(c => c.replace('-', ' ')).join(' · ')}
-        </motion.p>
-
+        {/* Project name */}
         <motion.h1
           variants={fadeUp}
-          className="text-fg leading-[0.9] tracking-[-0.03em] mb-8"
-          style={{ fontSize: 'clamp(1.6rem, 2.2vw, 2.2rem)', fontWeight: 900 }}
+          className="text-fg leading-[0.92] tracking-[-0.025em] mb-8"
+          style={{ fontSize: 'clamp(1.5rem, 2vw, 2rem)', fontWeight: 900 }}
         >
           {project.title}
         </motion.h1>
 
-        {/* Meta */}
-        <motion.div variants={fadeUp} className="border-t border-fg/10 pt-6 space-y-5 mb-8">
-          {[
-            { label: 'Client', value: project.client },
-            { label: 'Year',   value: String(project.year) },
-          ].map(({ label, value }) => (
-            <div key={label}>
-              <p className="text-[9px] tracking-[0.18em] uppercase text-fg/30 mb-1" style={{ fontWeight: 600 }}>
-                {label}
-              </p>
-              <p className="text-sm text-fg/70" style={{ fontWeight: 400 }}>{value}</p>
-            </div>
-          ))}
+        {/* Meta blocks — bold label, regular value, like Specht */}
+        <motion.div variants={fadeUp} className="space-y-5 mb-8">
+          <MetaBlock label="Type of work" value={project.category.map(c => c.replace('-', ' ')).join(', ')} />
+          <MetaBlock label="Client" value={project.client} />
+          <MetaBlock label="Year" value={String(project.year)} />
         </motion.div>
 
-        {/* Description */}
         {project.description && (
           <motion.div variants={fadeUp} className="mb-8">
-            <p className="text-[9px] tracking-[0.18em] uppercase text-fg/30 mb-3" style={{ fontWeight: 600 }}>
-              Context
-            </p>
-            <p className="text-sm leading-relaxed text-fg/60" style={{ fontWeight: 300 }}>
+            <p className="text-sm text-fg mb-2" style={{ fontWeight: 700 }}>Context</p>
+            <p className="text-sm leading-relaxed text-fg/60" style={{ fontWeight: 400 }}>
               {project.description}
             </p>
           </motion.div>
         )}
 
-        {/* Tools */}
         {project.toolsUsed && (
           <motion.div variants={fadeUp} className="mb-8">
-            <p className="text-[9px] tracking-[0.18em] uppercase text-fg/30 mb-3" style={{ fontWeight: 600 }}>
-              Tools
-            </p>
-            <p className="text-sm text-fg/55 leading-relaxed" style={{ fontWeight: 300 }}>
+            <p className="text-sm text-fg mb-2" style={{ fontWeight: 700 }}>Tools</p>
+            <p className="text-sm text-fg/60 leading-relaxed" style={{ fontWeight: 400 }}>
               {project.toolsUsed.join(', ')}
             </p>
           </motion.div>
         )}
 
-        {/* Tags */}
         {project.tags && (
-          <motion.div variants={fadeUp} className="flex flex-wrap gap-1.5 mt-auto pt-6">
+          <motion.div variants={fadeUp} className="flex flex-wrap gap-1.5 mt-auto pt-6 border-t border-fg/8">
             {project.tags.map(tag => (
               <span
                 key={tag}
-                className="text-[8px] tracking-[0.14em] uppercase px-2.5 py-1.5 border border-fg/10 text-fg/30"
+                className="text-[9px] tracking-[0.12em] uppercase px-2.5 py-1.5 border border-fg/12 text-fg/35"
                 style={{ fontWeight: 500 }}
               >
                 {tag}
@@ -111,7 +96,7 @@ export function ProjectDetail({ project }: { project: Project }) {
         )}
       </motion.aside>
 
-      {/* ── Mobile info (stacked, not fixed) ── */}
+      {/* ── Mobile info (stacked) ── */}
       <motion.div
         variants={staggerContainer}
         initial="hidden"
@@ -128,41 +113,31 @@ export function ProjectDetail({ project }: { project: Project }) {
           </Link>
         </motion.div>
 
-        <motion.p variants={fadeUp} className="text-[9px] tracking-[0.22em] uppercase text-fg/30 mb-3" style={{ fontWeight: 600 }}>
-          {project.category.map(c => c.replace('-', ' ')).join(' · ')}
-        </motion.p>
-
         <motion.h1
           variants={fadeUp}
-          className="text-fg leading-[0.9] tracking-[-0.03em] mb-6"
+          className="text-fg leading-[0.9] tracking-[-0.03em] mb-8"
           style={{ fontSize: 'clamp(2rem, 8vw, 3.5rem)', fontWeight: 900 }}
         >
           {project.title}
         </motion.h1>
 
-        <motion.div variants={fadeUp} className="grid grid-cols-2 gap-6 mb-6 pt-5 border-t border-fg/10">
-          {[
-            { label: 'Client', value: project.client },
-            { label: 'Year',   value: String(project.year) },
-          ].map(({ label, value }) => (
-            <div key={label}>
-              <p className="text-[9px] tracking-[0.18em] uppercase text-fg/30 mb-1" style={{ fontWeight: 600 }}>{label}</p>
-              <p className="text-sm text-fg/70" style={{ fontWeight: 400 }}>{value}</p>
-            </div>
-          ))}
+        <motion.div variants={fadeUp} className="space-y-5 mb-6">
+          <MetaBlock label="Type of work" value={project.category.map(c => c.replace('-', ' ')).join(', ')} />
+          <MetaBlock label="Client" value={project.client} />
+          <MetaBlock label="Year" value={String(project.year)} />
         </motion.div>
 
         {project.description && (
-          <motion.p variants={fadeUp} className="text-sm leading-relaxed text-fg/55" style={{ fontWeight: 300 }}>
-            {project.description}
-          </motion.p>
+          <motion.div variants={fadeUp}>
+            <p className="text-sm text-fg mb-2" style={{ fontWeight: 700 }}>Context</p>
+            <p className="text-sm leading-relaxed text-fg/60" style={{ fontWeight: 400 }}>{project.description}</p>
+          </motion.div>
         )}
       </motion.div>
 
-      {/* ── Scrollable images — offset by sidebar width on desktop ── */}
+      {/* ── Scrollable images ── */}
       <div className="md:ml-[260px] lg:ml-[300px] xl:ml-[340px]">
 
-        {/* Hero */}
         {project.heroImageUrl && (
           <div className="w-full">
             <Image
@@ -177,24 +152,23 @@ export function ProjectDetail({ project }: { project: Project }) {
           </div>
         )}
 
-        {/* Gallery sections */}
         {project.sections?.map((section) => (
-          <section key={section.title} className="mt-px">
+          <section key={section.title}>
 
             {/* Section label */}
-            <div className="px-6 md:px-8 py-5 border-t border-fg/10 flex items-center gap-4">
-              <span className="text-[9px] tracking-[0.24em] uppercase text-fg/30 shrink-0" style={{ fontWeight: 600 }}>
+            <div className="px-6 md:px-8 pt-10 pb-4 flex items-center gap-4">
+              <span className="text-[9px] tracking-[0.22em] uppercase text-fg/30 shrink-0" style={{ fontWeight: 600 }}>
                 {section.title}
               </span>
-              <div className="flex-1 h-px bg-fg/8" />
+              <div className="flex-1 h-px bg-fg/10" />
             </div>
 
-            {/* Rows with spacing between */}
-            <div className="flex flex-col gap-px">
+            {/* Image rows with visible white gaps */}
+            <div className="flex flex-col gap-4 px-0">
               {section.rows.map((row, ri) => (
                 <div
                   key={ri}
-                  className={row.length === 2 ? 'grid grid-cols-2 gap-px' : 'w-full'}
+                  className={row.length === 2 ? 'grid grid-cols-2 gap-4' : 'w-full'}
                 >
                   {row.map((src, ii) => (
                     <div key={ii} className="w-full overflow-hidden">
@@ -219,8 +193,7 @@ export function ProjectDetail({ project }: { project: Project }) {
           </section>
         ))}
 
-        {/* Footer */}
-        <div className="px-6 md:px-8 py-10 border-t border-fg/10">
+        <div className="px-6 md:px-8 py-12 mt-8 border-t border-fg/10">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase font-medium text-fg/30 hover:text-fg transition-colors duration-200"
