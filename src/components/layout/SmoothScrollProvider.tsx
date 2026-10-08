@@ -1,11 +1,12 @@
 'use client';
 
-import { createContext, useContext, useEffect, useRef } from 'react';
+import { createContext, useContext, useEffect, useRef, type RefObject } from 'react';
 import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
 
-const LenisContext = createContext<Lenis | null>(null);
+const LenisContext = createContext<RefObject<Lenis | null>>({ current: null });
 
+/** Ref to the live Lenis instance — null when smooth scrolling is off (reduced motion). */
 export function useLenis() {
   return useContext(LenisContext);
 }
@@ -15,9 +16,14 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
   const pathname = usePathname();
 
   useEffect(() => {
+    // Native scrolling for anyone who has asked for less motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.1,
+      wheelMultiplier: 1,
+      // Touch keeps the platform's own momentum — smoothing it feels laggy
+      syncTouch: false,
     });
 
     lenisRef.current = lenis;
@@ -32,6 +38,7 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
     return () => {
       cancelAnimationFrame(raf);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
 
@@ -43,7 +50,7 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
   }, [pathname]);
 
   return (
-    <LenisContext.Provider value={lenisRef.current}>
+    <LenisContext.Provider value={lenisRef}>
       {children}
     </LenisContext.Provider>
   );

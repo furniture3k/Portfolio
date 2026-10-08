@@ -1,20 +1,7 @@
-'use client';
-
-import { motion } from 'framer-motion';
-import { pageEnter } from '@/lib/motion';
-
 /**
- * template.tsx remounts on every navigation in Next.js App Router,
- * giving Framer Motion a fresh mount for each page transition.
+ * template.tsx remounts on every navigation in Next.js App Router, so the
+ * CSS entrance (and every load-in animation inside the page) replays per route.
  */
 export default function Template({ children }: { children: React.ReactNode }) {
-  return (
-    <motion.div
-      variants={pageEnter}
-      initial="hidden"
-      animate="visible"
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className="page-enter">{children}</div>;
 }

@@ -1,9 +1,11 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Unbounded } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 import { SmoothScrollProvider } from '@/components/layout/SmoothScrollProvider';
 import { CustomCursor } from '@/components/ui/CustomCursor';
+import { Intro, INTRO_SCRIPT } from '@/components/ui/Intro';
 import { ScrollProgress } from '@/components/ui/ScrollProgress';
 
 const unbounded = Unbounded({
@@ -27,14 +29,22 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+  viewportFit: 'cover',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={unbounded.variable}>
+    // suppressHydrationWarning: the intro script sets data-intro before React hydrates
+    <html lang="en" className={unbounded.variable} suppressHydrationWarning>
       <body className="bg-bg text-fg antialiased">
+        <script dangerouslySetInnerHTML={{ __html: INTRO_SCRIPT }} />
+        <Intro />
         <SmoothScrollProvider>
           <div
             className="w-full"
@@ -43,9 +53,10 @@ export default function RootLayout({
             <CustomCursor />
             <ScrollProgress />
             <Header />
-            <main className="min-h-screen w-full pt-nav-h">
+            <main className="min-h-svh w-full pt-nav-h">
               {children}
             </main>
+            <Footer />
           </div>
         </SmoothScrollProvider>
       </body>

@@ -13,18 +13,25 @@ const PLACEHOLDER_COLORS = [
   '#181818', '#202020', '#282828', '#1e1e1e', '#242424',
 ];
 
+// Mirrors the .work-grid column breakpoints in globals.css
+const SIZES =
+  '(min-width: 3400px) 13vw, (min-width: 2560px) 15vw, (min-width: 1920px) 17vw, ' +
+  '(min-width: 1200px) 20vw, (min-width: 900px) 25vw, (min-width: 640px) 34vw, 50vw';
+
 // ─── Card ─────────────────────────────────────────────────────────────────────
 
 function ProjectCard({
   project,
   index,
-  priority,
+  preload,
   isActive,
+  animate,
 }: {
   project: Project;
   index: number;
-  priority?: boolean;
+  preload?: boolean;
   isActive?: boolean;
+  animate?: boolean;
 }) {
   const { width, height } = DIMENSIONS[project.aspectRatio];
   const hasImage = Boolean(project.thumbnailUrl);
@@ -35,27 +42,30 @@ function ProjectCard({
       href={`/project/${project.slug}`}
       aria-label={`View ${project.title}`}
       aria-current={isActive ? 'page' : undefined}
-      title={project.title}
+      // The custom cursor picks this up and carries the title
+      data-cursor={project.title}
       // The open project stays faded in the grid; everything else fades on hover
-      className={[
-        'block transition-opacity duration-300',
-        isActive ? 'opacity-30' : 'opacity-100 hover:opacity-30',
-      ].join(' ')}
+      className={isActive ? 'tile is-active' : 'tile'}
     >
-      <div className="relative overflow-hidden w-full" style={{ aspectRatio: `${width} / ${height}` }}>
-        {hasImage ? (
-          <Image
-            src={project.thumbnailUrl}
-            alt={project.title}
-            width={width}
-            height={height}
-            priority={priority}
-            sizes="(min-width: 768px) 20vw, 50vw"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div style={{ backgroundColor: placeholderColor }} className="w-full h-full" />
-        )}
+      <div
+        className={animate ? 'tile-frame unmask' : 'tile-frame'}
+        style={{ aspectRatio: `${width} / ${height}`, '--i': Math.min(index, 18) } as React.CSSProperties}
+      >
+        <div className={animate ? 'settle w-full h-full' : 'w-full h-full'}>
+          {hasImage ? (
+            <Image
+              src={project.thumbnailUrl}
+              alt={project.title}
+              width={width}
+              height={height}
+              preload={preload}
+              sizes={SIZES}
+              className="tile-media object-cover"
+            />
+          ) : (
+            <div style={{ backgroundColor: placeholderColor }} className="tile-media" />
+          )}
+        </div>
       </div>
     </Link>
   );
@@ -70,15 +80,20 @@ export function ProjectGrid({
   projects: Project[];
   activeSlug?: string;
 }) {
+  // The load-in only plays where the grid is the page (home) — under an open
+  // project it sits below the fold and would animate unseen.
+  const animate = !activeSlug;
+
   return (
-    <div className="columns-2 md:columns-5" style={{ columnGap: 0 }}>
+    <div className="work-grid">
       {projects.map((project, i) => (
-        <div key={project.id} style={{ breakInside: 'avoid' }}>
+        <div key={project.id}>
           <ProjectCard
             project={project}
             index={i}
-            priority={!activeSlug && i === 0}
+            preload={!activeSlug && i === 0}
             isActive={project.slug === activeSlug}
+            animate={animate}
           />
         </div>
       ))}
