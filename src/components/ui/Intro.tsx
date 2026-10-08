@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 
 /**
  * Runs before first paint: marks the intro as seen for the rest of the session
@@ -8,8 +9,18 @@ import { useEffect } from 'react';
  */
 export const INTRO_SCRIPT = `try{if(sessionStorage.getItem('jt-intro')){document.documentElement.dataset.intro='seen'}else{sessionStorage.setItem('jt-intro','1')}}catch(e){}`;
 
-/** How long the curtain takes to play out, in ms (matches globals.css) */
-const INTRO_MS = 2100;
+/**
+ * When to stop making page-load animations wait for the curtain, in ms.
+ * Flipping the flag retimes every animation that reads --intro-delay, so it
+ * must happen after the slowest first-load animation has finished (the last
+ * grid tile settles at ~3.9s) — any earlier and in-flight reveals snap to
+ * their end state.
+ */
+const INTRO_SETTLED_MS = 4500;
+
+function markIntroSeen() {
+  document.documentElement.dataset.intro = 'seen';
+}
 
 /**
  * First-visit curtain — a field of accent green carrying the name, which
@@ -17,13 +28,19 @@ const INTRO_MS = 2100;
  * globals.css) so it starts before hydration.
  */
 export function Intro() {
+  const pathname = usePathname();
+  const firstPath = useRef(pathname);
+
   useEffect(() => {
-    // Once it has played, later client-side navigations shouldn't wait for it
-    const t = setTimeout(() => {
-      document.documentElement.dataset.intro = 'seen';
-    }, INTRO_MS);
+    const t = setTimeout(markIntroSeen, INTRO_SETTLED_MS);
     return () => clearTimeout(t);
   }, []);
+
+  // Navigating away early: the first page's animations are gone, and the next
+  // page shouldn't wait for a curtain that has already lifted
+  useEffect(() => {
+    if (pathname !== firstPath.current) markIntroSeen();
+  }, [pathname]);
 
   return (
     <div className="intro" aria-hidden>

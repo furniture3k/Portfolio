@@ -8,7 +8,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Project } from '@/data/projects';
 import { ProjectGrid } from '@/components/home/ProjectGrid';
 import { Lightbox, type ZoomedImage } from '@/components/projects/Lightbox';
-import { RevealImage } from '@/components/ui/Reveal';
 import { useLenis } from '@/components/layout/SmoothScrollProvider';
 
 const sectionId = (i: number) => `section-${i + 1}`;
@@ -125,7 +124,7 @@ function ProjectPager({ prev, next }: { prev: Project; next: Project }) {
   );
 }
 
-/** One portfolio sheet — reveals on scroll, zooms to full screen on click */
+/** One portfolio sheet — zooms to full screen on click */
 function Sheet({
   image,
   sizes,
@@ -166,7 +165,7 @@ function Sheet({
       </div>
     );
   }
-  return <RevealImage>{picture}</RevealImage>;
+  return picture;
 }
 
 export function ProjectDetail({ project, projects }: { project: Project; projects: Project[] }) {
