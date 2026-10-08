@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
 
 const LenisContext = createContext<Lenis | null>(null);
@@ -11,6 +12,7 @@ export function useLenis() {
 
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -32,6 +34,13 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       lenis.destroy();
     };
   }, []);
+
+  // Every navigation opens at the top — picking a project from the grid under
+  // an open project would otherwise leave you scrolled down at the grid.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    lenisRef.current?.scrollTo(0, { immediate: true, force: true });
+  }, [pathname]);
 
   return (
     <LenisContext.Provider value={lenisRef.current}>

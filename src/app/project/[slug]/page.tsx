@@ -29,5 +29,5 @@ export default async function ProjectPage({ params }: PageProps) {
     notFound();
   }
 
-  return <ProjectDetail project={project} />;
+  return <ProjectDetail project={project} projects={projects} />;
 }

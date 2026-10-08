@@ -13,27 +13,34 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-accent border-b border-fg/10">
+    // No background — page content scrolls underneath, like Specht Studio.
+    // pointer-events-none so the empty header area never blocks the grid;
+    // mix-blend-difference keeps the text legible over dark images.
+    <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none mix-blend-difference text-white">
+      <div className="flex items-baseline justify-between md:justify-start gap-x-6 md:gap-x-16 px-5 md:px-6 pt-5 md:pt-7">
 
-      {/* ── Mobile ── */}
-      <div className="md:hidden flex items-center justify-between px-5 py-3">
         <Link
           href="/"
-          className="text-[9px] tracking-[0.15em] uppercase font-bold hover:opacity-50 transition-opacity duration-200"
+          className="pointer-events-auto shrink-0 text-[13px] md:text-[17px] tracking-[-0.01em] font-medium hover:opacity-50 transition-opacity duration-200"
         >
           Joshua Trow
         </Link>
 
-        <ul className="flex items-center gap-5 list-none p-0 m-0">
+        <ul className="pointer-events-auto flex items-baseline gap-4 md:gap-7 list-none p-0 m-0">
           {NAV_LINKS.map(({ label, href }) => {
-            const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
+            // Project pages live under Work
+            const isActive =
+              href === '/'
+                ? pathname === '/' || pathname.startsWith('/project')
+                : pathname.startsWith(href);
             return (
               <li key={href}>
                 <Link
                   href={href}
                   className={[
-                    'text-[8px] tracking-[0.1em] uppercase transition-opacity duration-200',
-                    isActive ? 'font-bold opacity-100' : 'font-medium opacity-50 hover:opacity-100',
+                    'relative text-[12px] md:text-[17px] tracking-[-0.01em] font-normal transition-opacity duration-200 hover:opacity-50',
+                    'after:absolute after:bottom-[-2px] after:left-0 after:h-px after:w-full after:bg-white',
+                    isActive ? 'after:opacity-100' : 'after:opacity-0',
                   ].join(' ')}
                 >
                   {label}
@@ -43,43 +50,6 @@ export function Header() {
           })}
         </ul>
       </div>
-
-      {/* ── Desktop ── */}
-      <div className="hidden md:flex h-nav-h items-center justify-between px-8 lg:px-10">
-
-        {/* Logo + tagline */}
-        <Link
-          href="/"
-          className="shrink-0 text-[11px] tracking-[0.2em] uppercase font-bold hover:opacity-50 transition-opacity duration-200"
-        >
-          Joshua Trow
-        </Link>
-
-        {/* Nav */}
-        <ul className="flex items-center gap-10 list-none p-0 m-0 shrink-0">
-          {NAV_LINKS.map(({ label, href }) => {
-            const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
-            return (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className={[
-                    'relative text-[10px] tracking-[0.18em] uppercase transition-opacity duration-200',
-                    'after:absolute after:bottom-[-3px] after:left-0 after:h-px after:w-full',
-                    'after:origin-left after:bg-fg after:transition-transform after:duration-300',
-                    isActive
-                      ? 'font-bold opacity-100 after:scale-x-100'
-                      : 'font-medium opacity-50 after:scale-x-0 hover:opacity-100 hover:after:scale-x-100',
-                  ].join(' ')}
-                >
-                  {label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
     </header>
   );
 }

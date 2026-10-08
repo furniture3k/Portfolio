@@ -22,7 +22,7 @@
   --leading-display-loose: 1.05;
 
   /* Spacing tokens */
-  --spacing-nav-h: 56px;
+  --spacing-nav-h: 72px;
 
   /* Marquee animation */
   --animate-marquee: marquee var(--marquee-duration, 20s) linear infinite;
@@ -46,7 +46,8 @@ html {
 }
 
 body {
-  overflow-x: hidden;
+  /* clip, not hidden — hidden turns body into a scroll container and breaks position: sticky */
+  overflow-x: clip;
   max-width: 100vw;
   /* Ensure body never stretches past viewport on mobile */
   width: 100%;

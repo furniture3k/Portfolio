@@ -43,7 +43,7 @@ export default function RootLayout({
             <CustomCursor />
             <ScrollProgress />
             <Header />
-            <main className="min-h-screen w-full pt-[56px]">
+            <main className="min-h-screen w-full pt-nav-h">
               {children}
             </main>
           </div>

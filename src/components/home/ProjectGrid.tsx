@@ -1,6 +1,3 @@
-'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Project } from '@/data/projects';
@@ -18,18 +15,32 @@ const PLACEHOLDER_COLORS = [
 
 // ─── Card ─────────────────────────────────────────────────────────────────────
 
-function ProjectCard({ project, index, priority }: { project: Project; index: number; priority?: boolean }) {
+function ProjectCard({
+  project,
+  index,
+  priority,
+  isActive,
+}: {
+  project: Project;
+  index: number;
+  priority?: boolean;
+  isActive?: boolean;
+}) {
   const { width, height } = DIMENSIONS[project.aspectRatio];
   const hasImage = Boolean(project.thumbnailUrl);
   const placeholderColor = PLACEHOLDER_COLORS[index % PLACEHOLDER_COLORS.length];
-  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Link
       href={`/project/${project.slug}`}
-      className="block"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      aria-label={`View ${project.title}`}
+      aria-current={isActive ? 'page' : undefined}
+      title={project.title}
+      // The open project stays faded in the grid; everything else fades on hover
+      className={[
+        'block transition-opacity duration-300',
+        isActive ? 'opacity-30' : 'opacity-100 hover:opacity-30',
+      ].join(' ')}
     >
       <div className="relative overflow-hidden w-full" style={{ aspectRatio: `${width} / ${height}` }}>
         {hasImage ? (
@@ -39,28 +50,12 @@ function ProjectCard({ project, index, priority }: { project: Project; index: nu
             width={width}
             height={height}
             priority={priority}
+            sizes="(min-width: 768px) 20vw, 50vw"
             className="w-full h-full object-cover"
           />
         ) : (
           <div style={{ backgroundColor: placeholderColor }} className="w-full h-full" />
         )}
-        <div
-          style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%)',
-            opacity: isHovered ? 1 : 0,
-            transition: 'opacity 0.2s ease',
-            display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
-            padding: '10px', pointerEvents: 'none',
-          }}
-        >
-          <p className="text-[10px] tracking-wide text-white leading-snug" style={{ fontWeight: 500 }}>
-            {project.title}
-          </p>
-          <p className="text-[9px] text-white/60 mt-0.5" style={{ fontWeight: 400 }}>
-            {project.client}
-          </p>
-        </div>
       </div>
     </Link>
   );
@@ -68,12 +63,23 @@ function ProjectCard({ project, index, priority }: { project: Project; index: nu
 
 // ─── Grid ─────────────────────────────────────────────────────────────────────
 
-export function ProjectGrid({ projects }: { projects: Project[] }) {
+export function ProjectGrid({
+  projects,
+  activeSlug,
+}: {
+  projects: Project[];
+  activeSlug?: string;
+}) {
   return (
-    <div className="columns-2 md:columns-5" style={{ columnGap: 3, padding: 3 }}>
+    <div className="columns-2 md:columns-5" style={{ columnGap: 0 }}>
       {projects.map((project, i) => (
-        <div key={project.id} style={{ breakInside: 'avoid', marginBottom: 3 }}>
-          <ProjectCard project={project} index={i} priority={i === 0} />
+        <div key={project.id} style={{ breakInside: 'avoid' }}>
+          <ProjectCard
+            project={project}
+            index={i}
+            priority={!activeSlug && i === 0}
+            isActive={project.slug === activeSlug}
+          />
         </div>
       ))}
     </div>
